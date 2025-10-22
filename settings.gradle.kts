@@ -23,3 +23,4 @@ include(":app")
 include(":utils")
 
 rootProject.name = "SecurityVault"
+include("core")
