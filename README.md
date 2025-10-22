@@ -94,3 +94,48 @@ Tutti i dati vengono salvati in un unico file `.vault`, cifrato e autenticato co
 - Dopo l’uso, la master password e le chiavi derivate vengono **azzerate in RAM** (*best-effort* su JVM).
 
 ---
+
+### 🧩 Task CORE
+
+- [ ] Definire `Kdf`, `AeadCipher`, implementare `Pbkdf2Kdf` e `AesGcmCipher`.
+- [ ] Definire `VaultHeader`, serializzazione JSON (Kotlinx Serialization o Jackson).
+- [ ] Implementare `FileVaultStore` con layout file e AAD.
+- [ ] Implementare `DefaultVaultService` e `DefaultVaultHandle`.
+- [ ] Utility di zeroizzazione e gestione errori dedicati.
+- [ ] Test unitari su KDF / AES / Store.
+
+---
+
+### ✅ Definition of Done
+
+- `VaultService` passa test: **crea / apre / salva / CRUD**.  
+- Tentativi con password errata o file manomesso → **falliscono in modo sicuro**.  
+- Nessuna fuga di informazioni sensibili o log di debug contenenti segreti.
+
+---
+### 🧩 Task CLI
+
+- [ ] Schermata iniziale: “Crea / Apri”.
+- [ ] Lettura sicura della master password.
+- [ ] Menu CRUD + salvataggio.
+- [ ] Form di input voci (campi obbligatori / opzionali).
+- [ ] Stampa elenco (senza password in chiaro).
+- [ ] Integrazione con `VaultService` (nessuna dipendenza interna al core).
+- [ ] Test manuali end-to-end.
+
+---
+
+### ✅ Definition of Done
+
+- Flusso completo **usabile da terminale**, senza stacktrace o crash.  
+- Messaggi chiari e coerenti per l’utente.  
+- Tutte le funzioni principali (`Crea`, `Apri`, `Aggiungi`, `Mostra`, `Salva`, `Esci`) funzionano end-to-end.
+
+---
+
+## 🧩 Coordinamento
+
+- **Core → App:** API pubbliche di `VaultService` + modello dati.
+- **App → Core:** nessuna conoscenza dei dettagli crittografici.
+- **Condivisione:** documentazione minima (`core/README.md` con API esposte).
+
