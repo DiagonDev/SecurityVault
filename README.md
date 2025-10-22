@@ -22,6 +22,9 @@ The shared build logic was extracted to a convention plugin located in `buildSrc
 This project uses a version catalog (see `gradle/libs.versions.toml`) to declare and version dependencies
 and both a build cache and a configuration cache (see `gradle.properties`).
 
+# TRELLO
+https://trello.com/invite/b/68f8ff2d8522338ba7c477ad/ATTIc472fd231d7794081a9467f43f3982a924DFE4D9/securityvault
+
 # 🛡️ SecureVault – MVP
 
 ## Descrizione
