@@ -23,7 +23,8 @@ This project uses a version catalog (see `gradle/libs.versions.toml`) to declare
 and both a build cache and a configuration cache (see `gradle.properties`).
 
 # TRELLO
-https://trello.com/invite/b/68f8ff2d8522338ba7c477ad/ATTIc472fd231d7794081a9467f43f3982a924DFE4D9/securityvault
+Il primo che inizia a lavorare stabilisce l'ordine, direi che potremmo fare alternato (es se fai il primo task poi fai 3o 5o 7o etc).
+https://trello.com/invite/b/68f8ff2d8522338ba7c477ad/ATTIc472fd231d7794081a9467f43f3982a924DFE4D9/securityvault 
 
 # 🛡️ SecureVault – MVP
 
