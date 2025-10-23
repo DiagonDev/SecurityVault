@@ -1,4 +1,4 @@
-package org.example.kdf
+package com.etbasic.securityvault.core.kdf
 
 interface KDF {
     /**

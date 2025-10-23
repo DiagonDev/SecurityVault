@@ -1,4 +1,4 @@
-package org.example.com.etbasic.securityvault.core.cipher
+package com.etbasic.securityvault.core.cipher
 
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec

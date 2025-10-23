@@ -1,4 +1,4 @@
-package org.example.com.etbasic.securityvault.core.cipher
+package com.etbasic.securityvault.core.cipher
 
 import javax.crypto.AEADBadTagException
 
@@ -19,7 +19,7 @@ interface AeadCipher {
      * @param ciphertextWithIv blob completo nel formato: IV || CIPHERTEXT || TAG
      * @param aad gli stessi dati AAD usati in cifratura; se differiscono la verifica fallisce
      * @return il plaintext originale in chiaro
-     * @throws javax.crypto.AEADBadTagException se il TAG non è valido (chiave/IV/AAD errati o dati manomessi)
+     * @throws AEADBadTagException se il TAG non è valido (chiave/IV/AAD errati o dati manomessi)
      * @throws IllegalArgumentException se gli input non sono nel formato atteso (es. blob troppo corto)
      */
     @Throws(AEADBadTagException::class)

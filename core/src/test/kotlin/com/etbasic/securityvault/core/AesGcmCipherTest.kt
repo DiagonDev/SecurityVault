@@ -1,6 +1,6 @@
 package com.etbasic.securityvault.core
 
-import org.example.com.etbasic.securityvault.core.cipher.AesGcmCipher
+import com.etbasic.securityvault.core.cipher.AesGcmCipher
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

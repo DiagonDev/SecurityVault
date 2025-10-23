@@ -1,10 +1,10 @@
-package org.example.kdf
+package com.etbasic.securityvault.core.kdf
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import java.security.SecureRandom
 import java.util.Base64
 
-class PBKDF2() : KDF {
+class  PBKDF2() : KDF {
 
     override fun hashPassword(password: String): String {
         val salt = ByteArray(16) // È la lunghezza del salt in byte, più è lungo => meno rischio di collisioni ( serve anche per evitare attacchi con le rainbow table)
