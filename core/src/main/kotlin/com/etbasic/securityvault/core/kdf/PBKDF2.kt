@@ -1,4 +1,4 @@
-package org.example.kdf
+package org.example.com.etbasic.securityvault.core.kdf
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import java.security.SecureRandom
@@ -52,8 +52,8 @@ class PBKDF2(
 
     // Serve per creare la chiave da fornire ad AES
     override fun deriveKey(password: String, salt: ByteArray): ByteArray {
-        val spec = javax.crypto.spec.PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLength)
-        val factory = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+        val spec = PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLength)
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         return factory.generateSecret(spec).encoded
     }
 
