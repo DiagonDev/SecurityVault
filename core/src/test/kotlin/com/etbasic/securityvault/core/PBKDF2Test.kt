@@ -4,6 +4,7 @@ import com.etbasic.securityvault.core.kdf.PBKDF2
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.security.SecureRandom
 import java.util.Base64
 
 class PBKDF2Test {
@@ -13,9 +14,9 @@ class PBKDF2Test {
     fun `hashPassword produce stringa Base64 lunga 44 char (salt16+hash16)`() {
         val stored = kdf.hashPassword("password123")
         // 32 byte (16 salt + 16 hash) => 44 caratteri Base64 (con padding)
-        assertEquals(44, stored.length, "Atteso Base64 di 32 byte → 44 caratteri")
+        assertEquals(64, stored.length, "Atteso Base64 di 32 byte → 64 caratteri")
         val raw = Base64.getDecoder().decode(stored)
-        assertEquals(32, raw.size, "salt(16) + hash(16) = 32 byte")
+        assertEquals(48, raw.size, "salt(16) + hash(32) = 48 byte")
     }
 
     @Test
@@ -61,4 +62,26 @@ class PBKDF2Test {
         assertTrue(kdf.validatePassword(stored, ""))
         assertFalse(kdf.validatePassword(stored, "non-vuota"))
     }
+
+    @Test fun samePasswordSameSalt_sameKey() {
+        val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
+        val k1 = kdf.deriveKey("pwd", salt)
+        val k2 = kdf.deriveKey("pwd", salt)
+        assertArrayEquals(k1, k2)
+    }
+
+    @Test fun samePasswordDifferentSalt_diffKey() {
+        val s1 = ByteArray(16).also { SecureRandom().nextBytes(it) }
+        val s2 = ByteArray(16).also { SecureRandom().nextBytes(it) }
+        val k1 = kdf.deriveKey("pwd", s1)
+        val k2 = kdf.deriveKey("pwd", s2)
+        assertFalse(k1.contentEquals(k2))
+    }
+
+    @Test fun keyLengthMatches() {
+        val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
+        val k = kdf.deriveKey("pwd", salt)
+        assertEquals(kdf.keyLength / 8, k.size)
+    }
+
 }

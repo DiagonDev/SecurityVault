@@ -4,6 +4,11 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.security.MessageDigest
 
+/**
+ * Questa è una classe helper, i nomi dei metodi sono abbastanza auto esplicativi
+ * Serve come punto di riferimento unico per convertire le cose, se lo facessimo in ogni classe
+ * potrebbe capitare che ci siano delle divergenze di formato
+ */
 object VaultHeaderCodec {
     // JSON “stabile”: niente indentazione, niente espliciti null, includi default
     val json = Json {

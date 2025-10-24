@@ -37,3 +37,4 @@ include(":utils")
 
 rootProject.name = "SecurityVault"
 include("core")
+include("cli")

@@ -11,6 +11,7 @@ interface AeadCipher {
      * @return bytearray: IV (nonce) || CIPHERTEXT (testo cifrato) || TAG (codice di autenticazione)
      * IV serve per rendere la cifratura non deterministica cambiando sempre, altrimenti un attaccante capirebbe
      * che il testo cifrato non è cambiato anche senza password. Non deve essere segreto
+     * blob è un insieme di dati, nel nostro caso: IV | cipherText | TAG
      * */
     fun encrypt(key: ByteArray, plaintext: ByteArray, aad: ByteArray? = null): ByteArray
 
