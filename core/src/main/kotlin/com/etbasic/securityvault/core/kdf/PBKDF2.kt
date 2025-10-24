@@ -4,11 +4,16 @@ import javax.crypto.spec.PBEKeySpec
 import java.security.SecureRandom
 import java.util.Base64
 
-class  PBKDF2() : KDF {
+class PBKDF2(
+    val iterationCount: Int = 65536,
+    val keyLength: Int = 256
+) : KDF {
 
     override fun hashPassword(password: String): String {
-        val salt = ByteArray(16) // È la lunghezza del salt in byte, più è lungo => meno rischio di collisioni ( serve anche per evitare attacchi con le rainbow table)
-        SecureRandom().nextBytes(salt) // Genera i numeri casuali del salt in base alla sua lunghezza
+        // È la lunghezza del salt in byte, più è lungo => meno rischio di collisioni ( serve anche per evitare attacchi con le rainbow table)
+        val salt = ByteArray(16)
+        // Genera i numeri casuali del salt in base alla sua lunghezza
+        SecureRandom().nextBytes(salt)
         /*
         * @param iterationCount => PBKDF2 applica ripetutamente HMAC-SHA256 65536 volte.
         * Più alto = più lento da calcolare = più difficile da attaccare con brute-force.
@@ -16,7 +21,7 @@ class  PBKDF2() : KDF {
         * @param keyLength è la lunghezza in BIT della key generata
         * */
         //Costruisce la specifica per PBKDF2
-        val spec = PBEKeySpec(password.toCharArray(), salt, 65536, 128)
+        val spec = PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLength)
         // viene scelto il tipo di algoritmo per cifrare la master password
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         // viene effettivamente fatto l´hash della password
@@ -38,11 +43,18 @@ class  PBKDF2() : KDF {
         val salt = decodedHash.copyOfRange(0, 16)
         // copia i byte successivi al salt che sono l'hash effettivo della password
         val originalHash = decodedHash.copyOfRange(16, decodedHash.size)
-        val spec = PBEKeySpec(inputPassword.toCharArray(), salt, 65536, 128)
+        val spec = PBEKeySpec(inputPassword.toCharArray(), salt, iterationCount, keyLength)
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         val newHash = factory.generateSecret(spec).encoded
         // compara l´hash generato per la password fornita in input dall'utente con l'hash estratto dal database
         return originalHash.contentEquals(newHash)
+    }
+
+    // Serve per creare la chiave da fornire ad AES
+    override fun deriveKey(password: String, salt: ByteArray): ByteArray {
+        val spec = PBEKeySpec(password.toCharArray(), salt, iterationCount, keyLength)
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+        return factory.generateSecret(spec).encoded
     }
 
 }

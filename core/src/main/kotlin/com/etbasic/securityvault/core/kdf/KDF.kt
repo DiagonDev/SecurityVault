@@ -20,4 +20,14 @@ interface KDF {
      *
      */
     fun validatePassword(storedHash: String, inputPassword: String): Boolean
+    /*
+    * Crea la chiave derivata da utilizzare per cifrare i dati con AES
+    *
+    * @param password la password inserita dall'utente
+    * @param salt il salt utilizzato per quella password
+    *
+    * @return la chiave derivata
+    *
+    * */
+    fun deriveKey(password: String, salt: ByteArray): ByteArray
 }
