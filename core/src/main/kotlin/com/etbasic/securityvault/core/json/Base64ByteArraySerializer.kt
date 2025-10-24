@@ -10,6 +10,7 @@ import java.util.Base64
 
 /**
  * Gli oggeti in kotlin sono come i singleton, in questo cao è la concretizzazione di Kserializer
+ * Serve perchè ByteArray è troppo grande, Base64 è più piccolo.
  */
 object Base64ByteArraySerializer : KSerializer<ByteArray> {
     override val descriptor: SerialDescriptor =
