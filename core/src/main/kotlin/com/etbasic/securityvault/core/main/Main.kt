@@ -5,21 +5,15 @@ import com.etbasic.securityvault.core.kdf.PBKDF2
 import com.etbasic.securityvault.core.model.VaultHeader
 import com.etbasic.securityvault.core.model.VaultHeaderCodec
 import com.etbasic.securityvault.core.persistence.FileVaultStore
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.io.Console
 import java.io.File
 import java.security.SecureRandom
 import javax.crypto.AEADBadTagException
+import com.etbasic.securityvault.core.model.VaultEntry
+import com.etbasic.securityvault.core.model.VaultPayload
 
-// Modello semplice per la parte "plaintext" del vault (json)
-@Serializable
-data class VaultEntry(val id: String, val title: String, val username: String, val password: String, val notes: String? = null)
-
-@Serializable
-data class VaultData(val entries: MutableList<VaultEntry> = mutableListOf())
 
 object Main {
     private val json = Json { prettyPrint = true; encodeDefaults = true }
@@ -95,7 +89,7 @@ object Main {
         )
 
         // 4) plaintext iniziale (vuoto)
-        val initialData = VaultData()
+        val initialData = VaultPayload()
         val plaintext = json.encodeToString(initialData).toByteArray(Charsets.UTF_8)
 
         // 5) AAD = sha256(header-json)
@@ -145,7 +139,7 @@ object Main {
             val aad = VaultHeaderCodec.aadOf(header)
 
             val plain = AesGcmCipher().decrypt(encKey, vf.ciphertext, aad)
-            val vaultData = json.decodeFromString<VaultData>(plain.toString(Charsets.UTF_8))
+            val vaultData = json.decodeFromString<VaultPayload>(plain.toString(Charsets.UTF_8))
 
             println("=== Entries (${vaultData.entries.size}) ===")
             vaultData.entries.forEachIndexed { idx, e ->
@@ -187,7 +181,7 @@ object Main {
             val aad = VaultHeaderCodec.aadOf(header)
 
             val plain = AesGcmCipher().decrypt(encKey, vf.ciphertext, aad)
-            val vaultData = json.decodeFromString<VaultData>(plain.toString(Charsets.UTF_8))
+            val vaultData = json.decodeFromString<VaultPayload>(plain.toString(Charsets.UTF_8))
 
             // input nuova entry
             print("Titolo: "); val title = readLineTrim()
@@ -240,7 +234,7 @@ object Main {
             val oldKey = encKdfOld.deriveKey(oldPw, header.encSalt)
             val aadOld = VaultHeaderCodec.aadOf(header)
             val plaintext = AesGcmCipher().decrypt(oldKey, vf.ciphertext, aadOld)
-            val vaultData = json.decodeFromString<VaultData>(plaintext.toString(Charsets.UTF_8))
+            val vaultData = json.decodeFromString<VaultPayload>(plaintext.toString(Charsets.UTF_8))
 
             // ora rigenera header + key con la nuova password
             val newEncSalt = ByteArray(16).also { SecureRandom().nextBytes(it) }
